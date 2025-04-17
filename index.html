@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A fun Rock-Paper-Scissors game made by a Moringa student using HTML, CSS, and JavaScript.">
+  <title>Rock-Paper-Scissors Game</title>
+  
+  <!-- Favicon icon from Flaticon: https://www.flaticon.com/free-icon/rock-paper-scissors_6000614 -->
+
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/128/6000/6000614.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Rock 🪨 Paper 📄 Scissors ✂️ Game</h1>
+ <main>
+  <div id="start-display">
+    <button id="start-btn">Start Game</button>
+  </div>
+
+  <div id="loader" class="loader hidden">Loading game...</div>
+
+  <div id="game-area" class="hidden">
+    <h2 id="round-display">Round 1</h2>
+    
+    <!-- Rock, Paper, Scissors Buttons -->
+
+    <div id="buttons-container">
+      <button class="game-btn" id="rock" aria-label="Rock">🪨</button>
+      
+      <button class="game-btn" id="paper" aria-label="Paper">📄</button>
+
+      <button class="game-btn" id="scissors" aria-label="Scissors">✂️</button>
+      
+    </div>
+
+    <div id="outcome"></div>
+    <div id="score-board">You: 0 | Computer: 0</div>
+  </div>
+
+  <div id="game-over" class="hidden">
+    <h2>Game Over</h2>
+    <p id="final-points"></p>
+    <button id="restart-btn">Restart</button>
+  </div>
+
+  <div id="toast"></div>
+ </main>
+
+  <script src="script.js"></script>
+
+  <footer>
+    <p>Made with ❤️ by <strong>Emmah Gicheru</strong>, Moringa Student | © 2025</p>
+  </footer>
+   
+</body>
+</html>
