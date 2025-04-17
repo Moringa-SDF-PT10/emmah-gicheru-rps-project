@@ -26,16 +26,21 @@
     <!-- Rock, Paper, Scissors Buttons -->
 
     <div id="buttons-container">
-      <button class="game-btn" id="rock" aria-label="Rock">🪨</button>
+      <button id="rock" class="game-btn" aria-label="Rock">
+        <i class="fas fa-hand-rock"></i> Rock
+      </button>
       
-      <button class="game-btn" id="paper" aria-label="Paper">📄</button>
-
-      <button class="game-btn" id="scissors" aria-label="Scissors">✂️</button>
+      <button id="paper" class="game-btn" aria-label="Paper">
+        <i class="fas fa-hand-paper"></i> Paper
+      </button>
       
+      <button id="scissors" class="game-btn" aria-label="Scissors">
+        <i class="fas fa-hand-scissors"></i> Scissors
+      </button>
     </div>
 
     <div id="outcome"></div>
-    <div id="score-board">You: 0 | Computer: 0</div>
+    <div id="score-board">You:🧍 0 | Computer:💻 0</div>
   </div>
 
   <div id="game-over" class="hidden">
@@ -44,12 +49,13 @@
     <button id="restart-btn">Restart</button>
   </div>
 
-  <div id="toast"></div>
+  <div id="toast" role="alert"></div>
  </main>
 
   <script src="script.js"></script>
+  <script src="https://kit.fontawesome.com/ba786cc8f8.js" crossorigin="anonymous"></script>
 
-  <footer>
+  <footer id="page-footer">
     <p>Made with ❤️ by <strong>Emmah Gicheru</strong>, Moringa Student | © 2025</p>
   </footer>
    

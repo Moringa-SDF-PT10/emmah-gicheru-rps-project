@@ -7,8 +7,8 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #d9cbee;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%236519df' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+  background-color: #DFDBE5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%236c27dc' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
   text-align: center;
   font-family: 'Montserrat', 'DM Sans',sans-serif;
   font-weight: bold;
@@ -20,14 +20,19 @@ h1, h2 {
   color: #f77474;
 }
 
+main {
+  padding: 20px;
+}
+
 button {
   padding: 10px 20px;
   margin: 10px;
-  font-size: 1rem;
+  font-size: 1.5rem;
   border-radius: 10px;
   border: none;
-  background-color: #2e86de;
-  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  background-color: #452ede;
+  color: black;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
@@ -41,8 +46,9 @@ button {
 }
 
 .game-btn:hover {
-  background-color: #d6eaff;
+  background-color: #d9d6ff9e;
   transform: scale(1.1);
+  animation: bounce 0.3s ease forwards;
 }
 
 .game-btn {
@@ -50,7 +56,7 @@ button {
   padding: 20px;
   margin: 10px;
   border-radius: 50%;
-  background-color: #f0f0f0;
+  background-color: #f0f0f0b9;
   border: 2px solid #ccc;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -62,14 +68,21 @@ button {
 }
 
 #score-board {
-  background-color: #fff;
+  background-color: rgba(135, 152, 222, 0.726);
   color: #333;
-  font-size: 1.2rem;
   padding: 10px 20px;
+  margin: 10px auto;
   border-radius: 10px;
-  display: inline-block;
-  margin-top: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  width: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+#score-board:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 600px) {
@@ -116,13 +129,17 @@ button {
 }
 
 .loader {
-  border: 6px solid #f3f3f3;
+  border: 6px solid #f3f3f37e;
   border-radius: 50%;
-  border-top: 6px solid #3498db;
+  border-top: 6px solid #db3442a3;
   width: 50px;
   height: 50px;
   animation: spin 1s linear infinite;
   margin: 30px auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 @keyframes spin {
@@ -146,30 +163,34 @@ button {
 }
 
 #game-over {
-  background-color: #fff;
+  background-color: #ffffffc4;
   padding: 30px;
   border-radius: 20px;
   width: 80%;
   max-width: 400px;
   margin: 40px auto;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s ease-in-out;
 }
 
 footer {
   background-color: #f77474;
   color: white;
-  padding: 10px 0;
-  position: relative;
-  bottom: 0;
-  width: 100%;
+  padding: 10px 20px;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 700px;
   font-family: 'DM Sans', sans-serif;
   font-weight: bold;
-  margin-top: 30px;
-  box-shadow: 0 10px 10px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  opacity: 1;
   transition: transform 0.6s ease, opacity 0.6s ease;
-  transform: translateY(30px); 
-  opacity: 0;
 }
+
 footer p {
   margin: 0;
   font-size: 1rem;
@@ -180,7 +201,13 @@ footer.show-footer {
   opacity: 1;
 }
 
-.hidden {
-  display: none;
+@media (max-width: 600px) {
+  footer {
+    width: 90%;
+    max-width: none;
+  }
 }
 
+.hidden {
+  display: none !important;
+}
