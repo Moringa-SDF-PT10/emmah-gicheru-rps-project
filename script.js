@@ -1,71 +1,95 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const RPS = "https://rps101.pythonanywhere.com/api/v1/objects/all";
+  const RPS_API = "https://rps101.pythonanywhere.com/api/v1/objects/all";
 
   const startBtn = document.getElementById("start-btn");
-  const restartBtn = document.getElementById("restart-btn");
   const gameArea = document.getElementById("game-area");
-  const gameOver = document.getElementById("game-over");
   const loader = document.getElementById("loader");
-  const scoreBoard = document.getElementById("score-board");
+  const startDisplay = document.getElementById("start-display");
   const roundDisplay = document.getElementById("round-display");
+  const gameButtons = document.getElementById("game-buttons");
+  const outcome = document.getElementById("outcome");
+  const scoreBoard = document.getElementById("score-board");
+  const gameOver = document.getElementById("game-over");
   const finalPoints = document.getElementById("final-points");
+  const restartBtn = document.getElementById("restart-btn");
   const toast = document.getElementById("toast");
   const darkModeToggle = document.getElementById("dark-mode-toggle");
+  const playerNameInput = document.getElementById("player-name");
 
   let round = 1;
-  const maxRounds = 3;
-  let playerScore = 0;
+  let userScore = 0;
   let computerScore = 0;
+  const maxRounds = 3;
+  let currentChoices = ["Rock", "Paper", "Scissors"];
+  let playerName = "";
 
-  const choiceIcons = {
-    Rock: '🪨',
-    Paper: '📄',
-    Scissors: '✂️'
+  const emojiMap = {
+    Rock: "🪨",
+    Paper: "📄",
+    Scissors: "✂️"
   };
 
-  const choices = ["Rock", "Paper", "Scissors"];
+  // Set dark mode from localStorage
+  const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+  if (isDarkMode) {
+    document.body.classList.add('dark-mode');
+    darkModeToggle.checked = true;
+  }
 
-  // Start Game
-  startBtn.addEventListener("click", () => {
-    document.querySelector('footer').classList.add('hidden');
-    document.getElementById("start-display").classList.add("hidden");
-    loader.classList.remove("hidden");
-
-    setTimeout(() => {
-      loader.classList.add("hidden");
-      gameArea.classList.remove("hidden");
-      renderButtons(choices);
-      updateRoundDisplay();
-    }, 2000);
+  darkModeToggle.addEventListener("change", () => {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
   });
 
-  // Render RPS buttons
+  startBtn.addEventListener("click", async () => {
+    playerName = playerNameInput.value.trim();
+
+    if (playerName === "") {
+      showToast("Please enter your name before starting the game.");
+      return;
+    }
+
+    startDisplay.classList.add("hidden");
+    loader.classList.remove("hidden");
+
+    try {
+      const res = await fetch(RPS_API);
+      const data = await res.json();
+      const filtered = data.filter(item =>
+        ["Rock", "Paper", "Scissors"].includes(item)
+      );
+      currentChoices = filtered;
+      renderButtons(filtered);
+    } catch (err) {
+      console.error("API error:", err);
+      showToast("Using default choices due to API error");
+      renderButtons(currentChoices);
+    }
+
+    loader.classList.add("hidden");
+    gameArea.classList.remove("hidden");
+
+    // Update score display with the player's name
+    scoreBoard.textContent = `${playerName}:🧍 ${userScore} | Computer:💻 ${computerScore}`;
+  });
+
   function renderButtons(choices) {
-    const gameButtonsContainer = document.getElementById('game-buttons');
-    gameButtonsContainer.innerHTML = '';
-
+    gameButtons.innerHTML = "";
     choices.forEach(choice => {
-      const button = document.createElement('button');
-      button.textContent = choiceIcons[choice] || choice;
-      button.classList.add('game-btn');
-      button.setAttribute('aria-label', choice);
-      button.id = choice.toLowerCase();
-      button.addEventListener('click', () => handlePlayerChoice(choice));
-      gameButtonsContainer.appendChild(button);
+      const btn = document.createElement("button");
+      btn.textContent = `${emojiMap[choice] || ""} ${choice}`;
+      btn.classList.add("choice-btn");
+      btn.addEventListener("click", () => playRound(choice));
+      gameButtons.appendChild(btn);
     });
+    roundDisplay.textContent = `Round ${round}`;
   }
 
-  // Handle player click
-  function handlePlayerChoice(choice) {
-    playRound(choice);
-  }
-
-  // Play 1 round
   function playRound(playerChoice) {
-    const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+    const computerChoice = currentChoices[Math.floor(Math.random() * currentChoices.length)];
     let result = "";
-    let isWinner = false;
 
+    // Logic to calculate the result of the round
     if (playerChoice === computerChoice) {
       result = "It's a tie!";
     } else if (
@@ -73,79 +97,66 @@ document.addEventListener('DOMContentLoaded', () => {
       (playerChoice === "Paper" && computerChoice === "Rock") ||
       (playerChoice === "Scissors" && computerChoice === "Paper")
     ) {
-      result = "You win!";
-      playerScore++;
-      isWinner = true;
+      result = "You win this round!";
+      userScore++;
     } else {
-      result = "Computer wins!";
+      result = "Computer wins this round!";
       computerScore++;
     }
 
-    scoreBoard.textContent = `You: 🧍 ${playerScore} | Computer: 💻 ${computerScore}`;
-    showToast(result, isWinner);
+    outcome.innerHTML = `You chose ${emojiMap[playerChoice] || playerChoice}, Computer chose ${emojiMap[computerChoice] || computerChoice}.<br>${result}`;
 
-    if (round === maxRounds) {
-      gameOver.classList.remove("hidden");
-      finalPoints.textContent = `Final Score: You ${playerScore} - Computer ${computerScore}`;
-      gameArea.classList.add("hidden");
-      document.querySelector('footer').classList.remove('hidden');
+    // Update score board
+    scoreBoard.textContent = `${playerName}:🧍 ${userScore} | Computer:💻 ${computerScore}`;
 
-      if (playerScore > computerScore) {
-        showToast("Congratulations! You are the Winner! 🏆", true);
-      } else {
-        showToast("Better luck next time! 💔", false);
-      }
+    round++;
+    if (round > maxRounds) {
+      endGame();
     } else {
-      round++;
-      updateRoundDisplay();
+      roundDisplay.textContent = `Round ${round}`;
     }
   }
 
-  // Update Round UI
-  function updateRoundDisplay() {
-    roundDisplay.textContent = `Round ${round}`;
+  function endGame() {
+    gameArea.classList.add("hidden");
+    gameOver.classList.remove("hidden");
+
+    // Determine the winner and show the result with emojis
+    if (userScore > computerScore) {
+      finalPoints.textContent = `🎉 ${playerName} is the winner! 🎉\nYour Score: ${userScore} - ${computerScore} 💻`;
+    } else if (userScore < computerScore) {
+      finalPoints.textContent = `💻 Computer wins the game! 💻\nScore: ${userScore} - ${computerScore} 🎉`;
+    } else {
+      finalPoints.textContent = `🤝 It's a draw! 🤝\nScore: ${userScore} - ${computerScore}`;
+    }
   }
 
-  // Restart Button
   restartBtn.addEventListener("click", () => {
-    resetGame();
+    round = 1;
+    userScore = 0;
+    computerScore = 0;
+    roundDisplay.textContent = `Round ${round}`;
+    outcome.textContent = "";
+    scoreBoard.textContent = `${playerName}:🧍 0 | Computer:💻 0`;
+    gameOver.classList.add("hidden");
+    startDisplay.classList.remove("hidden");
   });
 
-  function resetGame() {
-    document.querySelector('footer').classList.remove('hidden');
-    gameOver.classList.add("hidden");
-    round = 1;
-    playerScore = 0;
-    computerScore = 0;
-    scoreBoard.textContent = `You: 🧍 0 | Computer: 💻 0`;
-    gameArea.classList.remove("hidden");
-    updateRoundDisplay();
-    showToast("Game restarted 🔁");
-  }
-
-  // Show Toast Notification
-  function showToast(message, isWinner = false) {
+  function showToast(message) {
     toast.textContent = message;
-    if (isWinner) toast.textContent += " 🎉🥳🎉";
-    toast.classList.add("show");
+    toast.className = "show";
     setTimeout(() => {
-      toast.classList.remove("show");
-    }, 2000);
+      toast.className = toast.className.replace("show", "");
+    }, 3000);
   }
 
-  // Dark mode toggle
-  if (darkModeToggle) {
-    darkModeToggle.addEventListener('change', (e) => {
-      document.body.classList.toggle('dark-mode', e.target.checked);
-      showToast(e.target.checked ? "Dark Mode Enabled 🌙" : "Light Mode Enabled ☀️");
-    });
-  }
-
-  // Keyboard shortcut to restart
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'r' || e.key === 'R') {
-      if (gameOver.classList.contains("hidden")) return;
-      resetGame();
+  // 🎮 Keyboard shortcuts: R, P, S
+  document.addEventListener("keydown", (e) => {
+    if (!gameArea.classList.contains("hidden")) {
+      const key = e.key.toLowerCase();
+      if (key === "r") playRound("Rock");
+      else if (key === "p") playRound("Paper");
+      else if (key === "s") playRound("Scissors");
     }
   });
 });
