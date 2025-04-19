@@ -219,5 +219,5 @@ footer.show-footer {
 }
 
 .hidden {
-  display: none !important;
+  display: none;
 }

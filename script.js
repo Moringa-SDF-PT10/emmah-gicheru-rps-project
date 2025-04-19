@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toast = document.getElementById("toast");
   const darkModeToggle = document.getElementById("dark-mode-toggle");
   const playerNameInput = document.getElementById("player-name");
+  const pageFooter = document.getElementById("page-footer"); // Changed to target the correct footer element
 
   let round = 1;
   let userScore = 0;
@@ -69,6 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
     loader.classList.add("hidden");
     gameArea.classList.remove("hidden");
 
+    // Hide footer when the game is being played
+    pageFooter.classList.add("hidden");
+
     // Update score display with the player's name
     scoreBoard.textContent = `${playerName}:🧍 ${userScore} | Computer:💻 ${computerScore}`;
   });
@@ -121,6 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
     gameArea.classList.add("hidden");
     gameOver.classList.remove("hidden");
 
+    // Show the footer when the game ends
+    pageFooter.classList.remove("hidden");
+
     // Determine the winner and show the result with emojis
     if (userScore > computerScore) {
       finalPoints.textContent = `🎉 ${playerName} is the winner! 🎉\nYour Score: ${userScore} - ${computerScore} 💻`;
@@ -140,6 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
     scoreBoard.textContent = `${playerName}:🧍 0 | Computer:💻 0`;
     gameOver.classList.add("hidden");
     startDisplay.classList.remove("hidden");
+
+    // Show footer again after restarting the game
+    pageFooter.classList.remove("hidden");
   });
 
   function showToast(message) {
