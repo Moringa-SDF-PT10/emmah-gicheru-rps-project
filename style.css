@@ -7,6 +7,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  justify-content: center;
   background-color: #DFDBE5;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%236c27dc' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
   text-align: center;
@@ -16,11 +17,39 @@ body {
 
 h1, h2 {
   margin-top: 25px;
-  color: #f77474;
+  color: #1a0fe5;
 }
 
 main {
   padding: 20px;
+}
+
+#start-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #e6d9d9;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  width: 200px;
+  margin: 2rem auto;
+}
+
+#start-display label {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+#player-name {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  width: 100%;
+  font-size: 1rem;
+  background-color: #ebeae3;
 }
 
 button {
@@ -30,7 +59,7 @@ button {
   border-radius: 10px;
   border: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  background-color: #452ede;
+  background-color: #914a98;
   color: black;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -55,7 +84,8 @@ button {
   padding: 20px;
   margin: 10px;
   border-radius: 50%;
-  background-color: #f0f0f0b9;
+  background-color: #e5edef;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   border: 2px solid #ccc;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -77,7 +107,7 @@ button {
   font-size: 18px;
   width: 50%;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
 
 #score-board:hover {
@@ -173,13 +203,13 @@ button {
 }
 
 #game-over {
-  background-color: #ffffffc4;
-  padding: 30px;
+  background-color: #e3e5c7c4;
+  padding: 20px;
   border-radius: 20px;
-  width: 80%;
+  width: 70%;
   max-width: 400px;
   margin: 40px auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   transition: all 0.4s ease-in-out;
 }
 

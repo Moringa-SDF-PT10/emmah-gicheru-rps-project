@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const RPS_API = "https://rps101.pythonanywhere.com/api/v1/objects/all";
 
+  // DOM Manipulation Elements
   const startBtn = document.getElementById("start-btn");
   const gameArea = document.getElementById("game-area");
   const loader = document.getElementById("loader");
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toast = document.getElementById("toast");
   const darkModeToggle = document.getElementById("dark-mode-toggle");
   const playerNameInput = document.getElementById("player-name");
-  const pageFooter = document.getElementById("page-footer"); // Changed to target the correct footer element
+  const pageFooter = document.getElementById("page-footer");
 
   let round = 1;
   let userScore = 0;
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playerName = playerNameInput.value.trim();
 
     if (playerName === "") {
-      showToast("Please enter your name before starting the game.");
+      showToast("Please enter your name to play the game.");
       return;
     }
 
@@ -81,15 +82,20 @@ document.addEventListener('DOMContentLoaded', () => {
     gameButtons.innerHTML = "";
     choices.forEach(choice => {
       const btn = document.createElement("button");
-      btn.textContent = `${emojiMap[choice] || ""} ${choice}`;
+      btn.textContent = `${emojiMap[choice] || " "} ${choice}`;
       btn.classList.add("choice-btn");
       btn.addEventListener("click", () => playRound(choice));
       gameButtons.appendChild(btn);
     });
-    roundDisplay.textContent = `Round ${round}`;
+    roundDisplay.textContent = `Round ${round} - ${playerName} vs Computer`;
   }
 
   function playRound(playerChoice) {
+    if (round > maxRounds) {
+ 
+      return;
+    }
+
     const computerChoice = currentChoices[Math.floor(Math.random() * currentChoices.length)];
     let result = "";
 
@@ -110,23 +116,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     outcome.innerHTML = `You chose ${emojiMap[playerChoice] || playerChoice}, Computer chose ${emojiMap[computerChoice] || computerChoice}.<br>${result}`;
 
+    outcome.style.color = result.includes("win") ? "green" : result.includes("tie") ? "orange" : "black";
+
     // Update score board
     scoreBoard.textContent = `${playerName}:🧍 ${userScore} | Computer:💻 ${computerScore}`;
 
     round++;
     if (round > maxRounds) {
       endGame();
+      
     } else {
       roundDisplay.textContent = `Round ${round}`;
     }
   }
 
   function endGame() {
+    // Prevent further round clicks by hiding buttons
+    gameButtons.innerHTML = ""; 
+
     gameArea.classList.add("hidden");
     gameOver.classList.remove("hidden");
 
     // Show the footer when the game ends
-    pageFooter.classList.remove("hidden");
+    pageFooter.classList.add("hidden");
 
     // Determine the winner and show the result with emojis
     if (userScore > computerScore) {
@@ -137,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
       finalPoints.textContent = `🤝 It's a draw! 🤝\nScore: ${userScore} - ${computerScore}`;
     }
   }
-
   restartBtn.addEventListener("click", () => {
     round = 1;
     userScore = 0;
@@ -152,15 +163,15 @@ document.addEventListener('DOMContentLoaded', () => {
     pageFooter.classList.remove("hidden");
   });
 
-  function showToast(message) {
+  function showToast(message, duration = 3000) {
     toast.textContent = message;
     toast.className = "show";
     setTimeout(() => {
       toast.className = toast.className.replace("show", "");
-    }, 3000);
+    }, duration);
   }
 
-  // 🎮 Keyboard shortcuts: R, P, S
+  // 🎹 Keyboard shortcuts: R, P, S
   document.addEventListener("keydown", (e) => {
     if (!gameArea.classList.contains("hidden")) {
       const key = e.key.toLowerCase();
