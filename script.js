@@ -57,9 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch(RPS_API);
       const data = await res.json();
+
       const filtered = data.filter(item =>
-        ["Rock", "Paper", "Scissors"].includes(item)
-      );
+        ["rock", "paper", "scissors"].includes(item.toLowerCase())
+      ).map(item => item.charAt(0).toUpperCase() + item.slice(1).toLowerCase());
+
       currentChoices = filtered;
       renderButtons(filtered);
     } catch (err) {
@@ -131,15 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function endGame() {
-    // Prevent further round clicks by hiding buttons
-    gameButtons.innerHTML = ""; 
-
+    // Prevent further round clicks by disabling pointer events on buttons
+    gameButtons.style.pointerEvents = 'none'; 
+  
     gameArea.classList.add("hidden");
     gameOver.classList.remove("hidden");
-
+  
     // Hide the footer when the game ends
     pageFooter.classList.add("hidden");
-
+  
     // Determine the winner and show the result with emojis
     if (userScore > computerScore) {
       finalPoints.textContent = `🎉 ${playerName} is the winner! 🎉\nYour Score: ${userScore} - ${computerScore} 💻`;
@@ -148,7 +150,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       finalPoints.textContent = `🤝 It's a draw! 🤝\nScore: ${userScore} - ${computerScore}`;
     }
+  
+    // Update leaderboard after the game ends
+    let leaderboard = JSON.parse(localStorage.getItem("rpsLeaderboard")) || [];
+    leaderboard.push({ name: playerName, score: userScore });
+    localStorage.setItem("rpsLeaderboard", JSON.stringify(leaderboard));
   }
+  
   restartBtn.addEventListener("click", () => {
     round = 1;
     userScore = 0;
@@ -158,11 +166,14 @@ document.addEventListener('DOMContentLoaded', () => {
     scoreBoard.textContent = `${playerName}:🧍 0 | Computer:💻 0`;
     gameOver.classList.add("hidden");
     startDisplay.classList.remove("hidden");
-
+  
+    // Enable the buttons for the new game
+    gameButtons.style.pointerEvents = 'auto'; 
+  
     // Show footer again after restarting the game
     pageFooter.classList.remove("hidden");
   });
-
+  
   function showToast(message, duration = 3000) {
     toast.textContent = message;
     toast.className = "show";
