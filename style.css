@@ -34,8 +34,8 @@ main {
   background-color: #e6d9d9;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-  width: 200px;
-  margin: 2rem auto;
+  width: 300px;
+  margin: 1.5rem auto;
 }
 
 #start-display label {
@@ -44,8 +44,8 @@ main {
 }
 
 #player-name {
-  padding: 0.5rem 1rem;
-  border: 1px solid #ccc;
+  padding: 0.5rem 0.5rem;
+  border: none;
   border-radius: 0.5rem;
   width: 100%;
   font-size: 1rem;
@@ -204,11 +204,11 @@ button {
 
 #game-over {
   background-color: #e3e5c7c4;
-  padding: 20px;
+  padding: 10px;
   border-radius: 20px;
-  width: 70%;
-  max-width: 400px;
-  margin: 40px auto;
+  width: 60%;
+  max-width: 500px;
+  margin: 20px auto;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   transition: all 0.4s ease-in-out;
 }
