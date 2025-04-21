@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gameArea.classList.add("hidden");
     gameOver.classList.remove("hidden");
 
-    // Show the footer when the game ends
+    // Hide the footer when the game ends
     pageFooter.classList.add("hidden");
 
     // Determine the winner and show the result with emojis
